@@ -45,5 +45,3 @@ print('Outcome : {}\nCoefficients : {}'.format(outcome, coefficients))
 # Lastly, the predictor is only given the X value ([a,b,c] array) for its,
 # linear regression and the outcome will be what the predictor predicts
 # with this given value based on the map that has been fitted for it.
-
-# (does it predict coefficients??)
