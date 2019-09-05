@@ -21,7 +21,7 @@ DailySummary = namedtuple("DailySummary", features)
 
 
 # getting the data from the api, and creating a list for each day's url
-# for the project, the data will be in one url
+# for the project, the data will be in one url, can use it as local json data
 def extract_weather_data(url, api_key, target_date, days):
     records = []
     for _ in range(days):
@@ -50,3 +50,56 @@ def extract_weather_data(url, api_key, target_date, days):
 
 # creating a list of records, for the past 100 days
 records = extract_weather_data(BASE_URL, API_KEY, target_date, 100)
+
+
+# creating a dataframe with pandas, for cleaning and processing data
+df = pd.DataFrame(records, columns=features).set_index('date')
+
+
+# creating a frame with mean temp, and mean dewpoint as selected properties
+tmp = df[['meantempm', 'meandewptm']].head(10)
+tmp
+
+
+# Using the data from the previous day to create a new column
+
+# 1 day prior
+N = 1
+
+# target measurement of mean temperature
+feature = 'meantempm'
+
+# total number of rows
+rows = tmp.shape[0]
+
+# a list representing Nth prior measurements of feature
+# notice that the front of the list needs to be padded with N
+# None values to maintain the constistent rows length for each N
+nth_prior_measurements = [None]*N + [tmp[feature][i-N] for i in range(N, rows)]
+
+# make a new column name of feature_N and add to DataFrame
+col_name = "{}_{}".format(feature, N)
+tmp[col_name] = nth_prior_measurements
+tmp
+
+####
+
+
+# This is a function that will do the same thing as the steps above
+def derive_nth_day_feature(df, feature, N):
+    rows = df.shape[0]
+    nth_prior_measurements = [None]*N + \
+        [df[feature][i-N] for i in range(N, rows)]
+    col_name = "{}_{}".format(feature, N)
+    df[col_name] = nth_prior_measurements
+
+
+# Looping through the features that are not the 'date' property
+for feature in features:
+    if feature != 'date':
+        for N in range(1, 4):
+            derive_nth_day_feature(df, feature, N)
+
+
+# Displaying the data
+df.columns
