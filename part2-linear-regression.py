@@ -12,6 +12,8 @@ import statsmodels.api as sm
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 
+# FROM https://stackabuse.com/using-machine-learning-to-predict-the-weather-part-2/
+
 
 # example of previous csv file
 df = pd.read_csv('end-part2_df.csv').set_index('date')

@@ -5,6 +5,7 @@ import pandas as pd
 import requests
 import matplotlib.pyplot as plt
 
+# From https://stackabuse.com/using-machine-learning-to-predict-the-weather-part-2/
 
 # Adding an API Key and connecting to url
 # https://pudding.cool/2017/12/mars-data/marsWeather.json -> for project
