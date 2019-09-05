@@ -10,6 +10,7 @@ autopep8 = "*"
 pandas = "*"
 requests = "*"
 matplotlib = "*"
+sklearn = "*"
 
 [requires]
 python_version = "3.7"
