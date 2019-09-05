@@ -99,7 +99,7 @@ ax.set_xticklabels(names)
 plt.show()
 
 
-# Make predictions on validation dataset
+# Make predictions on validation dataset training KNN classifier
 knn = KNeighborsClassifier()
 knn.fit(X_train, Y_train)
 predictions = knn.predict(X_validation)
