@@ -103,3 +103,64 @@ for feature in features:
 
 # Displaying the data
 df.columns
+
+
+# makeing list of original features without meantempm, mintempm, and maxtempm
+to_remove = [feature
+             for feature in features
+             if feature not in ['meantempm', 'mintempm', 'maxtempm']]
+
+# makeing a list of columns to keep
+to_keep = [col for col in df.columns if col not in to_remove]
+
+# select only the columns in to_keep and assign to df
+df = df[to_keep]
+df.columns
+
+
+# provide informatino on the data
+df.info()
+
+
+df = df.apply(pd.to_numeric, errors='coerce')
+df.info()
+
+
+# Call describe on df and transpose it due to the large number of columns
+spread = df.describe().T
+
+# precalculate interquartile range for ease of use in next calculation
+IQR = spread['75%'] - spread['25%']
+
+# create an outliers column which is either 3 IQRs below the first quartile or
+# 3 IQRs above the third quartile
+spread['outliers'] = (spread['min'] < (spread['25%']-(3*IQR))
+                      ) | (spread['max'] > (spread['75%']+3*IQR))
+
+# just display the features containing extreme outliers
+spread.ix[spread.outliers, ]
+
+
+# creating a histogram for humidity
+%matplotlib inline
+plt.rcParams['figure.figsize'] = [14, 8]
+df.maxhumidity_1.hist()
+plt.title('Distribution of maxhumidity_1')
+plt.xlabel('maxhumidity_1')
+plt.show()
+
+
+# creating a histogram fro min pressure
+df.minpressurem_1.hist()
+plt.title('Distribution of minpressurem_1')
+plt.xlabel('minpressurem_1')
+plt.show()
+
+
+# iterate over the precip columns
+for precip_col in ['precipm_1', 'precipm_2', 'precipm_3']:
+    # create a boolean array of values representing nans
+    missing_vals = pd.isnull(df[precip_col])
+    df[precip_col][missing_vals] = 0
+
+df = df.dropna()
