@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 
 # Using the sckit library
 # using pandas library
-df_train = pd.read_csv('train.csv')
-df_test = pd.read_csv('test.csv')
+df_train = pd.read_csv('../test-data/train.csv')
+df_test = pd.read_csv('../test-data/test.csv')
 
 df_train.dropna(inplace=True)
 
